@@ -25,7 +25,6 @@ services:
     healthCheckPath: /health
     autoDeploy: true
 
-# Render disk (for ChromaDB persistence)
 disks:
   - name: chroma-data
     mountPath: /opt/render/project/src/chroma_data
