@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: codemind-api
+    runtime: python
+    plan: free
+    buildCommand: |
+      pip install -r requirements.txt
+      python -c "import chromadb; print('ChromaDB ready')"
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: DATABASE_URL
+        sync: false
+      - key: GITHUB_TOKEN
+        sync: false
+      - key: SECRET_KEY
+        generateValue: true
+      - key: OLLAMA_URL
+        value: http://localhost:11434
+      - key: ENVIRONMENT
+        value: production
+      - key: CHROMA_PERSIST_DIRECTORY
+        value: /opt/render/project/src/chroma_data
+    healthCheckPath: /health
+    autoDeploy: true
+
+# Render disk (for ChromaDB persistence)
+disks:
+  - name: chroma-data
+    mountPath: /opt/render/project/src/chroma_data
+    sizeGB: 1
